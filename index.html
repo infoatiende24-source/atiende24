@@ -1390,17 +1390,22 @@
     <section id="demo" class="chat-demo-section animate-on-scroll">
         <div class="section-inner">
             <div class="section-header">
-                <span class="section-badge green">Demo en vivo</span>
-                <h2>Así funciona Atiende24</h2>
-                <p>Un paciente escribe a las 22:30 y esto es lo que pasa:</p>
+                <span class="section-badge green">Cómo funciona</span>
+                <h2>Mira cómo funciona Atiende24</h2>
+                <p>Un paciente escribe a las 22:30. Esto es lo que pasa:</p>
             </div>
 
-            <div class="chat-container">
+            <!-- Paso 1: Vista del paciente -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <span style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">PASO 1: Lo que ve el paciente</span>
+            </div>
+
+            <div class="chat-container" style="margin-bottom: 3rem;">
                 <div class="chat-header">
                     <div class="chat-avatar">🦷</div>
                     <div>
                         <div class="chat-name">Clínica Dental Sonrisa</div>
-                        <div class="chat-status">en línea</div>
+                        <div class="chat-status">WhatsApp Business</div>
                     </div>
                 </div>
                 <div class="chat-body">
@@ -1411,42 +1416,68 @@
                     
                     <div class="chat-message bot">
                         ¡Hola! 👋 Gracias por contactar con Clínica Dental Sonrisa.<br><br>
-                        Soy el asistente virtual y te responderé al instante. Para ayudarte mejor, selecciona una opción:
-                        <div class="chat-time">22:31</div>
+                        En este momento no estamos disponibles, pero hemos recibido tu mensaje.<br><br>
+                        📅 <strong>Horario de atención:</strong> Lunes a Viernes de 9:00 a 20:00<br>
+                        🚨 <strong>Urgencias:</strong> Llámanos al 912 345 678<br><br>
+                        Te responderemos a primera hora. ¡Gracias por tu paciencia! 😊
+                        <div class="chat-time">22:31 · Enviado automáticamente</div>
                     </div>
 
-                    <div class="chat-options">
-                        <div class="chat-option">📅 Pedir cita</div>
-                        <div class="chat-option">🦷 Implantes</div>
-                        <div class="chat-option">🚨 Urgencia</div>
-                        <div class="chat-option">💰 Precios</div>
+                    <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 12px;">
+                        <p style="color: #047857; font-weight: 600; margin: 0;">✅ El paciente sabe que su mensaje fue recibido</p>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0.5rem 0 0 0;">No se queda esperando en silencio</p>
                     </div>
+                </div>
+            </div>
 
-                    <div class="chat-message incoming" style="margin-top: 16px;">
-                        🦷 Implantes
-                        <div class="chat-time">22:32</div>
+            <!-- Paso 2: Vista del equipo -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <span style="background: #10b981; color: white; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 0.9rem;">PASO 2: A la mañana siguiente, tu equipo ve esto</span>
+            </div>
+
+            <div class="chat-container">
+                <div class="chat-header" style="background: #111827;">
+                    <div class="chat-avatar">💻</div>
+                    <div>
+                        <div class="chat-name">Panel Atiende24 - Clínica</div>
+                        <div class="chat-status">3 mensajes nuevos</div>
                     </div>
-
-                    <div class="chat-message bot">
-                        ¡Perfecto! 🦷 Nuestro especialista en implantes es el Dr. García.<br><br>
-                        📅 <strong>Próxima disponible:</strong> Mañana a las 10:00h o Jueves a las 17:30h<br><br>
-                        ¿Quieres que te reservemos una consulta gratuita? Responde con tu nombre y teléfono y te confirmamos mañana a primera hora.
-                        <div class="chat-time">22:32</div>
+                </div>
+                <div class="chat-body">
+                    <!-- Mensaje del sistema -->
+                    <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; margin-bottom: 1rem; border-radius: 8px;">
+                        <strong style="color: #1e40af;">📋 Nuevo mensaje recibido</strong><br>
+                        <span style="color: #6b7280; font-size: 0.875rem;">22:31 de ayer • 11 horas esperando</span>
                     </div>
 
                     <div class="chat-message incoming">
-                        María García, teléfono 612 345 678
-                        <div class="chat-time">22:33</div>
+                        Hola, me gustaría información sobre implantes dentales. ¿Tienen disponibilidad para consulta?
+                        <div class="chat-time">22:31</div>
                     </div>
 
-                    <div class="chat-message bot">
-                        ✅ ¡Perfecto, María!<br><br>
-                        Hemos recibido tu solicitud. Mañana a primera hora te llamaremos para confirmar tu cita.<br><br>
-                        📋 <strong>Resumen:</strong><br>
-                        • Interés: Implantes dentales<br>
-                        • Teléfono: 612 345 678<br><br>
-                        ¡Gracias por confiar en nosotros! 😊
-                        <div class="chat-time">22:33</div>
+                    <!-- Panel de respuestas -->
+                    <div style="background: #f9fafb; border: 2px solid #10b981; border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                        <p style="font-weight: 600; color: #111827; margin-bottom: 0.75rem;">💬 Respuestas preparadas para implantes:</p>
+                        
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#e5e7eb'">
+                            <strong style="color: #10b981;">✓ Respuesta 1:</strong> Información general implantes
+                            <p style="font-size: 0.8rem; color: #6b7280; margin: 0.25rem 0 0 0;">"Hola, gracias por tu interés en implantes. Nuestro especialista es el Dr. García..."</p>
+                        </div>
+                        
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.75rem; margin-bottom: 0.5rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#e5e7eb'">
+                            <strong style="color: #10b981;">✓ Respuesta 2:</strong> Pedir datos para cita
+                            <p style="font-size: 0.8rem; color: #6b7280; margin: 0.25rem 0 0 0;">"Para agendar tu consulta, necesito tu nombre completo y teléfono..."</p>
+                        </div>
+                        
+                        <div style="background: white; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.75rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#10b981'" onmouseout="this.style.borderColor='#e5e7eb'">
+                            <strong style="color: #10b981;">✓ Respuesta 3:</strong> Enviar precios orientativos
+                            <p style="font-size: 0.8rem; color: #6b7280; margin: 0.25rem 0 0 0;">"El precio de un implante oscila entre X y Y según el caso..."</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 12px;">
+                        <p style="color: #047857; font-weight: 600; margin: 0;">✅ Tu equipo selecciona, envía y gestiona la cita en su agenda</p>
+                        <p style="color: #6b7280; font-size: 0.875rem; margin: 0.5rem 0 0 0;">Respuestas profesionales listas para usar. Sin pensar, sin escribir desde cero.</p>
                     </div>
                 </div>
             </div>
@@ -1458,30 +1489,30 @@
         <div class="section-inner">
             <div class="section-header">
                 <span class="section-badge green">La Solución</span>
-                <h2>Atiende24 no es un chatbot frío</h2>
-                <p>Es un sistema estratégico de atención por WhatsApp diseñado específicamente para clínicas dentales. Responde al instante, organiza cada consulta y protege tus oportunidades.</p>
+                <h2>Respuestas profesionales sin escribir desde cero</h2>
+                <p>Atiende24 convierte el caos de WhatsApp en un sistema ordenado: mensaje automático inicial + biblioteca de respuestas preparadas que tu equipo selecciona y envía con un clic.</p>
             </div>
 
             <div class="steps">
                 <div class="step">
                     <div class="step-number">1</div>
                     <h3>El paciente escribe</h3>
-                    <p>Un cliente envía un WhatsApp preguntando por un tratamiento, a cualquier hora.</p>
+                    <p>Un cliente envía un WhatsApp a cualquier hora, incluso fuera de horario.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <h3>Respuesta instantánea</h3>
-                    <p>Atiende24 responde al instante con un mensaje profesional, sin esperas.</p>
+                    <h3>Respuesta automática</h3>
+                    <p>WhatsApp Business envía un mensaje de bienvenida personalizado al instante.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <h3>Clasificación inteligente</h3>
-                    <p>El sistema identifica si es cita, urgencia o consulta informativa.</p>
+                    <h3>Respuestas preparadas</h3>
+                    <p>Tu equipo tiene textos profesionales listos para seleccionar y enviar según cada caso.</p>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
-                    <h3>Equipo preparado</h3>
-                    <p>Tu personal solo atiende lo importante, sin interrupciones innecesarias.</p>
+                    <h3>Cita gestionada</h3>
+                    <p>El equipo confirma la cita en la agenda de la clínica. Tú mantienes el control total.</p>
                 </div>
             </div>
 
@@ -1489,43 +1520,43 @@
                 <div class="benefit">
                     <div class="benefit-icon">⚡</div>
                     <div>
-                        <h3>Atención inmediata 24/7</h3>
-                        <p>Sin contratar más personal ni pagar horas extras.</p>
+                        <h3>Mensaje automático inicial</h3>
+                        <p>El paciente siempre recibe respuesta, incluso fuera de horario.</p>
                     </div>
                 </div>
                 <div class="benefit">
                     <div class="benefit-icon">✅</div>
                     <div>
-                        <h3>Respuesta profesional</h3>
-                        <p>Incluso cuando la clínica está cerrada.</p>
+                        <h3>Respuestas profesionales listas</h3>
+                        <p>Tu equipo no escribe desde cero. Selecciona y envía con un clic.</p>
                     </div>
                 </div>
                 <div class="benefit">
-                    <div class="benefit-icon">🛡️</div>
+                    <div class="benefit-icon">📁</div>
                     <div>
-                        <h3>Clasificación automática</h3>
-                        <p>Citas, urgencias, presupuestos, información.</p>
+                        <h3>Organizado por categorías</h3>
+                        <p>Citas, urgencias, implantes, ortodoncia... todo ordenado.</p>
                     </div>
                 </div>
                 <div class="benefit">
                     <div class="benefit-icon">📈</div>
                     <div>
                         <h3>Más conversiones</h3>
-                        <p>Más contactos atendidos = más citas = más ingresos.</p>
+                        <p>Menos pacientes perdidos = más citas = más ingresos.</p>
                     </div>
                 </div>
                 <div class="benefit">
                     <div class="benefit-icon">😊</div>
                     <div>
-                        <h3>Equipo descansado</h3>
-                        <p>Reducción del estrés y la presión del equipo.</p>
+                        <h3>Equipo eficiente</h3>
+                        <p>Menos tiempo pensando qué responder, más tiempo atendiendo.</p>
                     </div>
                 </div>
                 <div class="benefit">
-                    <div class="benefit-icon">🔗</div>
+                    <div class="benefit-icon">🎯</div>
                     <div>
-                        <h3>Integración natural</h3>
-                        <p>Se adapta a tu sistema actual sin complicaciones.</p>
+                        <h3>Control total</h3>
+                        <p>Tú gestionas las citas en tu agenda. Sin automatizaciones confusas.</p>
                     </div>
                 </div>
             </div>
