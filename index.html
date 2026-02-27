@@ -188,11 +188,15 @@
             font-size: 1.125rem;
         }
 
-        /* WhatsApp Floating Button */
-        .whatsapp-float {
+        /* WhatsApp Widget */
+        .whatsapp-widget {
             position: fixed;
             bottom: 24px;
             right: 24px;
+            z-index: 999;
+        }
+
+        .whatsapp-float {
             width: 60px;
             height: 60px;
             background: #25D366;
@@ -201,10 +205,10 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
-            z-index: 999;
-            text-decoration: none;
+            cursor: pointer;
             animation: float 3s ease-in-out infinite;
             transition: all 0.3s;
+            border: none;
         }
 
         .whatsapp-float:hover {
@@ -218,22 +222,170 @@
             fill: white;
         }
 
-        .whatsapp-tooltip {
-            position: absolute;
-            right: 70px;
-            background: #111827;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.875rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+        .whatsapp-float.active {
+            background: #dc3545;
         }
 
-        .whatsapp-float:hover .whatsapp-tooltip {
+        .whatsapp-float.active svg {
+            transform: rotate(45deg);
+            transition: transform 0.3s;
+        }
+
+        /* WhatsApp Chat Popup */
+        .whatsapp-popup {
+            position: absolute;
+            bottom: 75px;
+            right: 0;
+            width: 350px;
+            max-width: calc(100vw - 48px);
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s ease;
+        }
+
+        .whatsapp-popup.active {
             opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .whatsapp-popup-header {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .whatsapp-popup-avatar {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .whatsapp-popup-info h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .whatsapp-popup-info p {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .whatsapp-popup-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+        }
+
+        .whatsapp-popup-status::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .whatsapp-popup-body {
+            background: #e5ddd5;
+            padding: 16px;
+            min-height: 120px;
+        }
+
+        .whatsapp-welcome-message {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 0 8px 8px 8px;
+            max-width: 85%;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .whatsapp-welcome-message p {
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .whatsapp-welcome-message .time {
+            font-size: 0.7rem;
+            color: #999;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .whatsapp-popup-footer {
+            padding: 12px;
+            background: #f0f0f0;
+            border-top: 1px solid #ddd;
+        }
+
+        .whatsapp-popup-footer textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 20px;
+            resize: none;
+            font-size: 0.9rem;
+            font-family: inherit;
+            outline: none;
+            background: white;
+        }
+
+        .whatsapp-popup-footer textarea:focus {
+            box-shadow: 0 0 0 2px #25D366;
+        }
+
+        .whatsapp-send-btn {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .whatsapp-send-btn button {
+            background: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .whatsapp-send-btn button:hover {
+            background: #128C7E;
+            transform: scale(1.02);
+        }
+
+        .whatsapp-send-btn button svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        @media (max-width: 480px) {
+            .whatsapp-popup {
+                width: calc(100vw - 48px);
+                right: 0;
+            }
         }
         
         /* Hero */
@@ -1277,13 +1429,44 @@
     </style>
 </head>
 <body>
-    <!-- WhatsApp Floating Button -->
-    <a href="https://wa.me/34667470862?text=Hola,%20me%20interesa%20Atiende24%20para%20mi%20clínica%20dental" class="whatsapp-float" target="_blank">
-        <span class="whatsapp-tooltip">¿Hablamos por WhatsApp?</span>
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-        </svg>
-    </a>
+    <!-- WhatsApp Widget -->
+    <div class="whatsapp-widget">
+        <!-- Chat Popup -->
+        <div class="whatsapp-popup" id="whatsappPopup">
+            <div class="whatsapp-popup-header">
+                <div class="whatsapp-popup-avatar">💬</div>
+                <div class="whatsapp-popup-info">
+                    <h4>Atiende24</h4>
+                    <p>Sistema WhatsApp para clínicas</p>
+                    <div class="whatsapp-popup-status">En línea - Respondemos al instante</div>
+                </div>
+            </div>
+            <div class="whatsapp-popup-body">
+                <div class="whatsapp-welcome-message">
+                    <p>¡Hola! 👋 Somos Atiende24. Cuéntanos sobre tu clínica dental y te mostramos cómo podemos ayudarte a captar más pacientes por WhatsApp.</p>
+                    <div class="time">Ahora</div>
+                </div>
+            </div>
+            <div class="whatsapp-popup-footer">
+                <textarea id="whatsappMessage" rows="2" placeholder="Escribe tu mensaje..."></textarea>
+                <div class="whatsapp-send-btn">
+                    <button onclick="sendWhatsApp()">
+                        <span>Enviar</span>
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Float Button -->
+        <button class="whatsapp-float" id="whatsappBtn" onclick="toggleWhatsApp()">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" id="whatsappIcon">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+        </button>
+    </div>
 
     <!-- Navbar -->
     <nav class="navbar">
@@ -1985,6 +2168,40 @@
             let current = parseInt(counter.textContent.replace(/\./g, ''));
             counter.textContent = (current + 1).toLocaleString('es-ES');
         }, 5000);
+
+        // WhatsApp Widget Functions
+        function toggleWhatsApp() {
+            const popup = document.getElementById('whatsappPopup');
+            const btn = document.getElementById('whatsappBtn');
+            popup.classList.toggle('active');
+            btn.classList.toggle('active');
+        }
+
+        function sendWhatsApp() {
+            const message = document.getElementById('whatsappMessage').value.trim();
+            const phoneNumber = '34667470862';
+            
+            // Si no hay mensaje, usar uno por defecto
+            const finalMessage = message || 'Hola, me interesa Atiende24 para mi clínica dental';
+            
+            // Crear URL de WhatsApp
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`;
+            
+            // Abrir WhatsApp
+            window.open(whatsappURL, '_blank');
+        }
+
+        // Cerrar popup al hacer clic fuera
+        document.addEventListener('click', function(e) {
+            const widget = document.querySelector('.whatsapp-widget');
+            const popup = document.getElementById('whatsappPopup');
+            const btn = document.getElementById('whatsappBtn');
+            
+            if (!widget.contains(e.target) && popup.classList.contains('active')) {
+                popup.classList.remove('active');
+                btn.classList.remove('active');
+            }
+        });
     </script>
 </body>
 </html>
