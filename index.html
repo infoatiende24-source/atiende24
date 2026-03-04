@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -15,19 +15,16 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-6px); }
         }
-        @keyframes pulse-ring {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(1.3); opacity: 0; }
-        }
         .whatsapp-glow { animation: glow-pulse 2s infinite; }
         .float-animation { animation: float 3s ease-in-out infinite; }
-        .pulse-ring { animation: pulse-ring 1.5s infinite; }
         input[type="range"] { -webkit-appearance: none; appearance: none; height: 12px; border-radius: 8px; outline: none; }
         input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 24px; height: 24px; border-radius: 50%; background: white; border: 3px solid #ef4444; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
         .chat-popup { display: none; }
         .chat-popup.active { display: block; }
         .modal-overlay { display: none; }
         .modal-overlay.active { display: flex; }
+        .success-message { display: none; }
+        .success-message.active { display: block; }
     </style>
 </head>
 <body class="min-h-screen bg-white">
@@ -178,39 +175,50 @@
                         
                         <!-- Right - Form -->
                         <div>
-                            <form action="https://formsubmit.co/infoatiende24@gmail.com" method="POST">
-                                <input type="hidden" name="_subject" value="📋 Nueva solicitud de AUDITORÍA GRATUITA">
-                                <input type="hidden" name="_captcha" value="false">
-                                <input type="hidden" name="_template" value="table">
-                                <input type="hidden" name="_next" value="">
-                                
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-1.5">Tu nombre *</label>
-                                        <input type="text" name="nombre" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dr. García">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-1.5">Nombre de la clínica *</label>
-                                        <input type="text" name="clinica" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dental Sonrisas">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-1.5">WhatsApp *</label>
-                                        <input type="tel" name="whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="+34 600 000 000">
-                                    </div>
-                                    <div>
-                                        <label class="block text-gray-700 font-medium mb-1.5">¿Usas WhatsApp Business actualmente?</label>
-                                        <select name="usa_whatsapp_business" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all">
-                                            <option value="No, uso WhatsApp normal">No, uso WhatsApp normal</option>
-                                            <option value="Sí, pero no lo configure bien">Sí, pero no lo configuré bien</option>
-                                            <option value="Sí, lo uso regularmente">Sí, lo uso regularmente</option>
-                                        </select>
-                                    </div>
-                                    <button type="submit" class="w-full bg-gradient-to-r from-[#25D366] to-[#20BD5A] hover:from-[#20BD5A] hover:to-[#25D366] text-white rounded-xl py-4 font-bold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2">
-                                        <i data-lucide="send" class="w-5 h-5"></i>
-                                        Solicitar auditoría gratuita
-                                    </button>
+                            <!-- FORMULARIO -->
+                            <form id="auditForm" class="space-y-4">
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-1.5">Tu nombre *</label>
+                                    <input type="text" id="nombre" name="nombre" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dr. García">
                                 </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-1.5">Nombre de la clínica *</label>
+                                    <input type="text" id="clinica" name="clinica" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dental Sonrisas">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-1.5">WhatsApp *</label>
+                                    <input type="tel" id="whatsapp" name="whatsapp" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="+34 600 000 000">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 font-medium mb-1.5">¿Usas WhatsApp Business actualmente?</label>
+                                    <select id="usa_wb" name="usa_whatsapp_business" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all">
+                                        <option value="No, uso WhatsApp normal">No, uso WhatsApp normal</option>
+                                        <option value="Sí, pero no lo configure bien">Sí, pero no lo configuré bien</option>
+                                        <option value="Sí, lo uso regularmente">Sí, lo uso regularmente</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-[#25D366] to-[#20BD5A] hover:from-[#20BD5A] hover:to-[#25D366] text-white rounded-xl py-4 font-bold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2">
+                                    <i data-lucide="send" class="w-5 h-5"></i>
+                                    Solicitar auditoría gratuita
+                                </button>
                             </form>
+                            
+                            <!-- MENSAJE DE ÉXITO -->
+                            <div id="successMessage" class="success-message text-center py-8">
+                                <div class="w-20 h-20 bg-[#25D366]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i data-lucide="check-circle" class="w-10 h-10 text-[#25D366]"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Solicitud enviada!</h3>
+                                <p class="text-gray-600 mb-4">Te contactaré por WhatsApp en menos de 24-48 horas con tu auditoría gratuita.</p>
+                                <div class="bg-gray-50 rounded-xl p-4 text-left">
+                                    <p class="text-sm text-gray-600"><strong>Próximos pasos:</strong></p>
+                                    <ul class="text-sm text-gray-600 mt-2 space-y-1">
+                                        <li>✓ Revisaré tu WhatsApp Business</li>
+                                        <li>✓ Identificaré los problemas</li>
+                                        <li>✓ Te enviaré las mejoras por WhatsApp</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -597,6 +605,54 @@
 
     <script>
         lucide.createIcons();
+
+        // FORMULARIO CON JAVASCRIPT - Envía a email Y abre WhatsApp
+        document.getElementById('auditForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const clinica = document.getElementById('clinica').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const usaWb = document.getElementById('usa_wb').value;
+            
+            // Crear mensaje para WhatsApp
+            const mensaje = `¡Hola Toni! Me gustaría recibir la auditoría gratuita de mi WhatsApp Business.
+
+` +
+                `📋 *Datos:*
+` +
+                `• Nombre: ${nombre}
+` +
+                `• Clínica: ${clinica}
+` +
+                `• WhatsApp: ${whatsapp}
+` +
+                `• WhatsApp Business actual: ${usaWb}`;
+            
+            // Abrir WhatsApp
+            window.open('https://wa.me/34667470862?text=' + encodeURIComponent(mensaje), '_blank');
+            
+            // Enviar email usando Formsubmit (en segundo plano)
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('clinica', clinica);
+            formData.append('whatsapp', whatsapp);
+            formData.append('usa_whatsapp_business', usaWb);
+            formData.append('_subject', '📋 Nueva solicitud de AUDITORÍA GRATUITA');
+            formData.append('_captcha', 'false');
+            formData.append('_template', 'table');
+            
+            fetch('https://formsubmit.co/infoatiende24@gmail.com', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            });
+            
+            // Mostrar mensaje de éxito
+            document.getElementById('auditForm').style.display = 'none';
+            document.getElementById('successMessage').classList.add('active');
+            lucide.createIcons();
+        });
 
         // ROI Calculator
         const patientsSlider = document.getElementById('patientsSlider');
