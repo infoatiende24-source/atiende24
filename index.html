@@ -1,1422 +1,988 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WhatsAppDental - Configuración Profesional WhatsApp Business para Clínicas Dentales</title>
-  <meta name="description" content="Configuración profesional de WhatsApp Business para clínicas dentales. Deja de perder pacientes por no responder a tiempo. Auditoría gratuita.">
-  <meta name="keywords" content="WhatsApp Business, clínica dental, automatización, configuración, consultoría dental, WhatsApp dental">
-  <meta name="author" content="Toni Real - WhatsAppDental">
-  <link rel="icon" href="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-  
-  <!-- Open Graph -->
-  <meta property="og:title" content="WhatsAppDental - Configuración WhatsApp Business para Clínicas Dentales">
-  <meta property="og:description" content="Configuración profesional de WhatsApp Business para clínicas dentales. Auditoría gratuita.">
-  <meta property="og:url" content="https://whatsappdental.com">
-  <meta property="og:type" content="website">
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            whatsapp: '#25D366',
-            'whatsapp-dark': '#20BD5A'
-          }
-        }
-      }
-    }
-  </script>
-  
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
-  <style>
-    /* Custom animations */
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-    
-    @keyframes pulse-glow {
-      0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7),
-                    0 0 20px rgba(37, 211, 102, 0.5),
-                    0 0 40px rgba(37, 211, 102, 0.3);
-      }
-      50% { 
-        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0),
-                    0 0 30px rgba(37, 211, 102, 0.6),
-                    0 0 60px rgba(37, 211, 102, 0.4);
-      }
-    }
-    
-    @keyframes fade-in-up {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes ripple {
-      0% { transform: scale(1); opacity: 1; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
-    
-    @keyframes bounce-soft {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-    
-    @keyframes typing {
-      0%, 60%, 100% { opacity: 0; }
-      30% { opacity: 1; }
-    }
-    
-    .animate-fade-in-up {
-      animation: fade-in-up 0.6s ease-out forwards;
-    }
-    
-    .animate-float {
-      animation: float 3s ease-in-out infinite;
-    }
-    
-    .animate-pulse-glow {
-      animation: pulse-glow 2s infinite;
-    }
-    
-    .animate-bounce-soft {
-      animation: bounce-soft 2s ease-in-out infinite;
-    }
-    
-    /* Custom slider styles */
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 12px;
-      border-radius: 8px;
-      outline: none;
-      cursor: pointer;
-    }
-    
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid currentColor;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    input[type="range"]::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: white;
-      border: 3px solid currentColor;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    /* Smooth scroll */
-    html { scroll-behavior: smooth; }
-    
-    /* Hide scrollbar for chat */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    
-    /* FAQ animation */
-    .faq-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease-out;
-    }
-    
-    .faq-content.open {
-      max-height: 500px;
-    }
-    
-    /* WhatsApp Widget Styles */
-    .wa-widget {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 9999;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    
-    .wa-button {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
-      transition: all 0.3s ease;
-      position: relative;
-      animation: pulse-glow 2s infinite;
-    }
-    
-    .wa-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 30px rgba(37, 211, 102, 0.6);
-    }
-    
-    .wa-button svg {
-      width: 36px;
-      height: 36px;
-      fill: white;
-    }
-    
-    .wa-popup {
-      position: absolute;
-      bottom: 80px;
-      right: 0;
-      width: 360px;
-      max-width: calc(100vw - 48px);
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-      opacity: 0;
-      visibility: hidden;
-      transform: translateY(20px) scale(0.95);
-      transition: all 0.3s ease;
-    }
-    
-    .wa-popup.active {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0) scale(1);
-    }
-    
-    .wa-header {
-      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    
-    .wa-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-    
-    .wa-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .wa-info h4 {
-      color: white;
-      font-weight: 600;
-      margin: 0;
-      font-size: 16px;
-    }
-    
-    .wa-info p {
-      color: rgba(255,255,255,0.9);
-      font-size: 13px;
-      margin: 2px 0 0 0;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    
-    .wa-status {
-      width: 8px;
-      height: 8px;
-      background: #4ADE80;
-      border-radius: 50%;
-      animation: pulse-status 2s infinite;
-    }
-    
-    @keyframes pulse-status {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    
-    .wa-body {
-      padding: 16px;
-      background: #ECE5DD;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4cfc6' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-    
-    .wa-message {
-      background: white;
-      padding: 12px 16px;
-      border-radius: 0 16px 16px 16px;
-      max-width: 85%;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-      font-size: 14px;
-      color: #303030;
-      line-height: 1.5;
-      position: relative;
-    }
-    
-    .wa-message::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -8px;
-      width: 0;
-      height: 0;
-      border-top: 0 solid transparent;
-      border-bottom: 16px solid transparent;
-      border-right: 16px solid white;
-    }
-    
-    .wa-time {
-      font-size: 11px;
-      color: rgba(0,0,0,0.45);
-      text-align: right;
-      margin-top: 4px;
-    }
-    
-    .wa-footer {
-      padding: 12px 16px;
-      background: white;
-      border-top: 1px solid #e5e5e5;
-    }
-    
-    .wa-start-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      width: 100%;
-      padding: 14px;
-      background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-      color: white;
-      border: none;
-      border-radius: 30px;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .wa-start-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-    }
-    
-    .wa-start-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
-    }
-    
-    /* Typing dots */
-    .typing-indicator {
-      display: flex;
-      gap: 4px;
-      padding: 12px 16px;
-      background: white;
-      border-radius: 0 16px 16px 16px;
-      max-width: 70px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    
-    .typing-indicator span {
-      width: 8px;
-      height: 8px;
-      background: #90949c;
-      border-radius: 50%;
-      animation: typing 1.4s infinite;
-    }
-    
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-  </style>
-</head>
-<body class="bg-white text-gray-900 antialiased">
-  
-  <!-- Header -->
-  <header id="header" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm transition-all duration-300">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16 sm:h-20">
-        <!-- Logo with Image -->
-        <div class="flex items-center gap-3">
-          <img src="./logo.png" alt="WhatsAppDental Logo" class="h-10 sm:h-12 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="hidden w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#25D366] flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-          </div>
-        </div>
-        
-        <!-- Desktop Nav -->
-        <nav class="hidden md:flex items-center gap-8">
-          <a href="#problemas" class="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Problemas</a>
-          <a href="#calculadora" class="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Calculadora</a>
-          <a href="#servicios" class="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Servicios</a>
-          <a href="#precios" class="text-gray-600 hover:text-gray-900 transition-colors text-sm font-medium">Precios</a>
-          <a href="#auditoria" class="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-5 py-2.5 text-sm font-semibold transition-all shadow-lg shadow-green-200/50 hover:shadow-green-300/50 hover:-translate-y-0.5">Auditoría gratis</a>
-        </nav>
-        
-        <!-- Mobile Menu Button -->
-        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
-          <svg id="menuIcon" class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-          </svg>
-          <svg id="closeIcon" class="w-6 h-6 text-gray-900 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-          </svg>
-        </button>
-      </div>
-    </div>
-    
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="md:hidden bg-white border-t hidden">
-      <nav class="flex flex-col p-4 gap-3">
-        <a href="#problemas" class="text-gray-600 hover:text-gray-900 transition-colors py-2 px-4 rounded-lg hover:bg-gray-50 mobile-link">Problemas</a>
-        <a href="#calculadora" class="text-gray-600 hover:text-gray-900 transition-colors py-2 px-4 rounded-lg hover:bg-gray-50 mobile-link">Calculadora</a>
-        <a href="#servicios" class="text-gray-600 hover:text-gray-900 transition-colors py-2 px-4 rounded-lg hover:bg-gray-50 mobile-link">Servicios</a>
-        <a href="#precios" class="text-gray-600 hover:text-gray-900 transition-colors py-2 px-4 rounded-lg hover:bg-gray-50 mobile-link">Precios</a>
-        <a href="#auditoria" class="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-5 py-3 text-sm font-semibold text-center mobile-link mt-2">Auditoría gratis</a>
-      </nav>
-    </div>
-  </header>
+'use client'
 
-  <!-- Hero Section -->
-  <section class="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-green-50/50 to-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in-up">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-          </svg>
-          WhatsApp Dental Setup
-        </div>
-        
-        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6 animate-fade-in-up" style="animation-delay: 0.1s">
-          Configuración profesional de <span class="text-[#25D366]">WhatsApp Business</span> para clínicas dentales
-        </h1>
-        
-        <p class="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s">
-          ¿Tu clínica pierde pacientes por no responder a tiempo? Te configuro WhatsApp Business en 3-5 días para que dejes de perder dinero.
-        </p>
-        
-        <!-- CTA Button -->
-        <div class="mb-6 animate-fade-in-up" style="animation-delay: 0.3s">
-          <a href="#auditoria" class="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#25D366] to-[#20BD5A] text-white rounded-2xl px-10 py-5 text-xl font-bold shadow-2xl shadow-green-300/50 hover:shadow-green-400/50 transition-all hover:scale-105 group relative overflow-hidden">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            <span>Auditoría gratuita de tu WhatsApp Business</span>
-            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-          </a>
-          <p class="mt-3 text-sm text-gray-500">Te digo qué está mal, qué mejorar y cómo solucionarlo • 100% gratis</p>
-        </div>
-        
-        <div class="animate-fade-in-up" style="animation-delay: 0.4s">
-          <button onclick="openWhatsApp()" class="text-[#25D366] hover:text-[#20BD5A] font-medium transition-all flex items-center gap-2 mx-auto">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-            O agenda una llamada de diagnóstico
-          </button>
-        </div>
-      </div>
-    </div>
-  </section>
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
+import { motion, AnimatePresence } from 'framer-motion'
+import {
+  MessageCircle,
+  Phone,
+  Clock,
+  Users,
+  CheckCircle2,
+  ArrowRight,
+  Calendar,
+  ChevronDown,
+  ChevronUp,
+  Send,
+  Menu,
+  X,
+  Sparkles,
+  Target,
+  Workflow,
+  Shield,
+  HeadphonesIcon,
+  Maximize2,
+  Calculator,
+  TrendingDown,
+  AlertTriangle,
+  Search,
+  Gift,
+  Zap,
+  Lock,
+  Tag,
+  Bell,
+  Settings,
+  GraduationCap,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 
-  <!-- Video Section -->
-  <section class="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
-    <div class="max-w-5xl mx-auto">
-      <div class="rounded-2xl overflow-hidden shadow-2xl">
-        <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%;">
-          <iframe
-            src="https://www.canva.com/design/DAG7A1ZbVYY/IIlJgDLZLgBPNW5aDXHbWw/watch?embed"
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-            frameborder="0"
-            allow="autoplay; fullscreen"
-            allowfullscreen
-          ></iframe>
-        </div>
-      </div>
-    </div>
-  </section>
+// ============================================
+// DATOS DE CONTACTO
+// ============================================
+const WHATSAPP_NUMBER = '34667470862' // España: +34 667 470 862
+const EMAIL_CONTACT = 'infoatiende24@gmail.com'
 
-  <!-- Problems Section -->
-  <section id="problemas" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">El problema que resuelvo</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-          Las clínicas dentales pierden entre <strong class="text-red-600">5-15 pacientes al mes</strong> por:
-        </p>
-      </div>
-      
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Problem 1 -->
-        <div class="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow border border-gray-100 hover:border-red-200">
-          <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-            </svg>
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">No responder a tiempo</h3>
-          <p class="text-gray-600 text-sm">Tardas horas en responder y mientras tanto, tu competencia ya les contestó.</p>
-        </div>
-        
-        <!-- Problem 2 -->
-        <div class="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow border border-gray-100 hover:border-red-200">
-          <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">Conversaciones desorganizadas</h3>
-          <p class="text-gray-600 text-sm">No sabes quién ya agendó, quién está pendiente o quién necesita seguimiento.</p>
-        </div>
-        
-        <!-- Problem 3 -->
-        <div class="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow border border-gray-100 hover:border-red-200">
-          <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-            </svg>
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">Sin seguimiento</h3>
-          <p class="text-gray-600 text-sm">Pacientes que cotizaron pero nunca confirmaron y olvidaste contactar de nuevo.</p>
-        </div>
-        
-        <!-- Problem 4 -->
-        <div class="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow border border-gray-100 hover:border-red-200">
-          <div class="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
-            </svg>
-          </div>
-          <h3 class="font-semibold text-gray-900 mb-2">Dinero perdido</h3>
-          <p class="text-gray-600 text-sm">Eso son entre 1.000€ y 3.000€ perdidos cada mes.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+}
 
-  <!-- Auditoría Gratuita Section -->
-  <section id="auditoria" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#25D366]/5 to-white">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>
-          </svg>
-          100% Gratis • Sin compromiso
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+}
+
+export default function Home() {
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const [whatsappOpen, setWhatsappOpen] = useState(false)
+  const [imageModalOpen, setImageModalOpen] = useState(false)
+  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [formData, setFormData] = useState({
+    nombre: '',
+    clinica: '',
+    whatsapp: '',
+    usa_wb: 'No, uso WhatsApp normal',
+  })
+
+  // ROI Calculator state
+  const [patientsLost, setPatientsLost] = useState(10)
+  const [treatmentPrice, setTreatmentPrice] = useState(200)
+
+  const monthlyLoss = patientsLost * treatmentPrice
+  const yearlyLoss = monthlyLoss * 12
+
+  // Format number consistently to avoid hydration mismatch
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const handleWhatsAppClick = (message?: string) => {
+    const defaultMessage = 'Hola! Me interesa una auditoría gratuita de mi WhatsApp Business para mi clínica dental.'
+    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message || defaultMessage)}`
+    window.open(url, '_blank')
+  }
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const message = `Hola! Solicito auditoría gratuita.
+
+Nombre: ${formData.nombre}
+Clínica: ${formData.clinica}
+WhatsApp: ${formData.whatsapp}
+WhatsApp Business: ${formData.usa_wb}`
+    
+    handleWhatsAppClick(message)
+    setFormSubmitted(true)
+  }
+
+  const problems = [
+    {
+      icon: <Phone className="w-6 h-6" />,
+      title: 'No responder a tiempo',
+      description: 'Tardas horas en responder y mientras tanto, tu competencia ya les contestó.',
+    },
+    {
+      icon: <MessageCircle className="w-6 h-6" />,
+      title: 'Conversaciones desorganizadas',
+      description: 'No sabes quién ya agendó, quién está pendiente o quién necesita seguimiento.',
+    },
+    {
+      icon: <Users className="w-6 h-6" />,
+      title: 'Sin seguimiento',
+      description: 'Pacientes que cotizaron pero nunca confirmaron y olvidaste contactar de nuevo.',
+    },
+    {
+      icon: <TrendingDown className="w-6 h-6" />,
+      title: 'Dinero perdido',
+      description: 'Eso son entre 1.000€ y 3.000€ perdidos cada mes.',
+    },
+  ]
+
+  const services = [
+    {
+      icon: <Settings className="w-5 h-5" />,
+      title: 'Configuración completa WhatsApp Business',
+      description: 'Perfil optimizado con catálogo de servicios y horarios.',
+    },
+    {
+      icon: <MessageCircle className="w-5 h-5" />,
+      title: 'Mensaje de bienvenida optimizado',
+      description: 'Primera impresión profesional para cada paciente nuevo.',
+    },
+    {
+      icon: <Zap className="w-5 h-5" />,
+      title: 'Respuestas rápidas',
+      description: 'Atajos para lo más frecuente: precios, ubicación, servicios.',
+    },
+    {
+      icon: <Tag className="w-5 h-5" />,
+      title: 'Sistema de etiquetas',
+      description: 'Organiza pacientes por estado: nuevo, pendiente, confirmado.',
+    },
+    {
+      icon: <Bell className="w-5 h-5" />,
+      title: 'Recordatorios de cita automatizados',
+      description: 'Reduce las ausencias con recordatorios automáticos.',
+    },
+    {
+      icon: <MessageCircle className="w-5 h-5" />,
+      title: 'Seguimiento post-tratamiento',
+      description: 'Fideliza pacientes con seguimiento automático.',
+    },
+    {
+      icon: <GraduationCap className="w-5 h-5" />,
+      title: 'Formación práctica (30 min)',
+      description: 'Te enseño a usar todo para que seas autónomo.',
+    },
+  ]
+
+  const faqs = [
+    {
+      question: '¿Cuánto cuesta exactamente?',
+      answer: 'El Setup Básico cuesta 197€ y el Setup Premium cuesta 347€. Ambos son pagos únicos, sin suscripciones ni costes ocultos. En la auditoría gratuita te ayudo a elegir el que mejor se adapta a tu clínica.',
+    },
+    {
+      question: '¿Necesito ser experto en tecnología?',
+      answer: 'No, para nada. WhatsApp Business es sencillo de usar. Yo te configuro todo y te enseño lo básico en una formación de 30 minutos. La mayoría de mis clientes manejan todo ellos solos después de la primera sesión.',
+    },
+    {
+      question: '¿Cuánto tiempo toma implementar?',
+      answer: 'El setup completo se implementa en 3-5 días hábiles. Te avanzo los tiempos exactos en la auditoría gratuita según las necesidades específicas de tu clínica.',
+    },
+    {
+      question: '¿Ofreces soporte después?',
+      answer: 'Sí, el Setup Básico incluye soporte por WhatsApp y el Setup Premium incluye 7 días de soporte. Si necesitas más tiempo o actualizaciones, podemos acordar un mantenimiento adicional.',
+    },
+    {
+      question: '¿Eres una empresa grande?',
+      answer: 'No, soy un consultor independiente. Eso significa que tú hablas directo conmigo, no con un call center. Me dedico específicamente a clínicas dentales porque conozco el sector.',
+    },
+    {
+      question: '¿Qué pasa si no me funciona?',
+      answer: 'Si después de implementar todo no ves mejoras en tu comunicación, trabajamos hasta que funcione. Mi objetivo es que salgas con un sistema que realmente te ayude a captar más pacientes.',
+    },
+    {
+      question: '¿Qué diferencia hay entre el Básico y el Premium?',
+      answer: 'El Setup Premium incluye todo lo del Básico más: mensajes de seguimiento post-tratamiento, personalización avanzada, catálogo de servicios completo, automatizaciones adicionales y 7 días de soporte por WhatsApp.',
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Header */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          isScrolled
+            ? 'bg-white/95 backdrop-blur-sm shadow-sm'
+            : 'bg-white/95 backdrop-blur-sm shadow-sm'
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16 sm:h-20">
+            {/* LOGO ACTUALIZADO */}
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo-wdw.png"
+                alt="WhatsApp Dental Web"
+                width={45}
+                height={45}
+                className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
+              />
+              <div className="flex flex-col leading-tight">
+                <span className="text-lg sm:text-xl font-bold text-gray-900">
+                  WhatsApp<span className="text-[#25D366]">Dental</span>
+                </span>
+                <span className="text-xs text-gray-500 hidden sm:block">Setup Profesional</span>
+              </div>
+            </div>
+
+            <nav className="hidden md:flex items-center gap-8">
+              <a href="#problemas" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+                Problemas
+              </a>
+              <a href="#calculadora" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+                Calculadora
+              </a>
+              <a href="#servicios" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+                Servicios
+              </a>
+              <a href="#precios" className="text-gray-600 hover:text-gray-900 transition-colors text-sm">
+                Precios
+              </a>
+              <a
+                href="#auditoria"
+                className="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-5 py-2 text-sm font-medium transition-all"
+              >
+                Auditoría gratis
+              </a>
+            </nav>
+
+            <button
+              className="md:hidden p-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6 text-gray-900" /> : <Menu className="w-6 h-6 text-gray-900" />}
+            </button>
+          </div>
         </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Auditoría gratuita de tu WhatsApp Business</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Déjame tu contacto y te hago un análisis completo. Te digo exactamente qué está mal y cómo arreglarlo.</p>
-      </div>
-      
-      <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-[#25D366]/20">
-        <div class="p-6 sm:p-8">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
-            <!-- Left - Benefits -->
-            <div>
-              <h3 class="font-bold text-gray-900 text-lg mb-4">¿Qué recibirás?</h3>
-              <div class="space-y-4">
-                <div class="flex gap-3 items-start">
-                  <div class="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 class="font-semibold text-gray-900">Qué está mal</h4>
-                    <p class="text-gray-600 text-sm">Errores que están haciendo que pierdas pacientes</p>
-                  </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="md:hidden bg-white border-t"
+            >
+              <nav className="flex flex-col p-4 gap-4">
+                <a href="#problemas" className="text-gray-600 hover:text-gray-900 transition-colors" onClick={() => setMobileMenuOpen(false)}>Problemas</a>
+                <a href="#calculadora" className="text-gray-600 hover:text-gray-900 transition-colors" onClick={() => setMobileMenuOpen(false)}>Calculadora</a>
+                <a href="#servicios" className="text-gray-600 hover:text-gray-900 transition-colors" onClick={() => setMobileMenuOpen(false)}>Servicios</a>
+                <a href="#precios" className="text-gray-600 hover:text-gray-900 transition-colors" onClick={() => setMobileMenuOpen(false)}>Precios</a>
+                <a href="#auditoria" className="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-5 py-2 text-sm font-medium text-center" onClick={() => setMobileMenuOpen(false)}>Auditoría gratis</a>
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </header>
+
+      {/* Hero Section */}
+      <section className="pt-24 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-green-50/50 to-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+            className="text-center max-w-3xl mx-auto"
+          >
+            <motion.div
+              variants={fadeInUp}
+              className="inline-flex items-center gap-2 bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-6"
+            >
+              <Sparkles className="w-4 h-4" />
+              WhatsApp Dental Setup
+            </motion.div>
+
+            <motion.h1
+              variants={fadeInUp}
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6"
+            >
+              Configuración profesional de{' '}
+              <span className="text-[#25D366]">WhatsApp Business</span> para clínicas dentales
+            </motion.h1>
+
+            <motion.p variants={fadeInUp} className="text-lg sm:text-xl text-gray-600 mb-8 leading-relaxed">
+              ¿Tu clínica pierde pacientes por no responder a tiempo? Te configuro WhatsApp Business en 3-5 días para que dejes de perder dinero.
+            </motion.p>
+
+            <motion.div variants={fadeInUp} className="mb-6">
+              <a
+                href="#auditoria"
+                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#25D366] to-[#20BD5A] text-white rounded-2xl px-10 py-5 text-xl font-bold shadow-2xl shadow-green-300/50 hover:shadow-green-400/50 transition-all hover:scale-105 group relative overflow-hidden"
+              >
+                <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></span>
+                <Search className="w-6 h-6 relative z-10" />
+                <span className="relative z-10">Auditoría gratuita de tu WhatsApp Business</span>
+                <ArrowRight className="w-5 h-5 relative z-10 group-hover:translate-x-1 transition-transform" />
+              </a>
+              <p className="mt-3 text-sm text-gray-500">Te digo qué está mal, qué mejorar y cómo solucionarlo • 100% gratis</p>
+            </motion.div>
+
+            <motion.div variants={fadeInUp}>
+              <button
+                onClick={() => handleWhatsAppClick()}
+                className="text-[#25D366] hover:text-[#20BD5A] font-medium transition-all flex items-center gap-2 mx-auto"
+              >
+                <Calendar className="w-5 h-5" />
+                O agenda una llamada de diagnóstico
+              </button>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Video Section */}
+      <section className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="rounded-2xl overflow-hidden shadow-2xl"
+          >
+            <div style={{ position: 'relative', width: '100%', height: 0, paddingBottom: '56.25%' }}>
+              <iframe
+                src="https://www.canva.com/design/DAG7A1ZbVYY/IIlJgDLZLgBPNW5aDXHbWw/watch?embed"
+                style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                frameBorder="0"
+                allow="autoplay; fullscreen"
+                allowFullScreen
+              ></iframe>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Problems Section */}
+      <section id="problemas" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-12 sm:mb-16"
+          >
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              El problema que resuelvo
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Las clínicas dentales pierden entre <strong className="text-red-600">5-15 pacientes al mes</strong> por:
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          >
+            {problems.map((problem, index) => (
+              <motion.div
+                key={index}
+                variants={fadeInUp}
+                className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow border border-gray-100"
+              >
+                <div className="w-12 h-12 rounded-xl bg-red-100 text-red-600 flex items-center justify-center mb-4">
+                  {problem.icon}
                 </div>
-                <div class="flex gap-3 items-start">
-                  <div class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-                    </svg>
-                  </div>
+                <h3 className="font-semibold text-gray-900 mb-2">{problem.title}</h3>
+                <p className="text-gray-600 text-sm">{problem.description}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* AUDITORÍA GRATUITA SECTION */}
+      <section id="auditoria" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#25D366]/5 to-white">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-8"
+          >
+            <motion.div
+              variants={fadeInUp}
+              className="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4"
+            >
+              <Gift className="w-4 h-4" />
+              100% Gratis • Sin compromiso
+            </motion.div>
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Auditoría gratuita de tu WhatsApp Business
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Déjame tu contacto y te hago un análisis completo. Te digo exactamente qué está mal y cómo arreglarlo.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={fadeInUp}
+          >
+            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border-2 border-[#25D366]/20">
+              <div className="p-6 sm:p-8">
+                <div className="grid md:grid-cols-2 gap-8 items-center">
                   <div>
-                    <h4 class="font-semibold text-gray-900">Qué mejorar</h4>
-                    <p class="text-gray-600 text-sm">Oportunidades que no estás aprovechando</p>
+                    <h3 className="font-bold text-gray-900 text-lg mb-4">¿Qué recibirás?</h3>
+                    <div className="space-y-4">
+                      <div className="flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
+                          <X className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Qué está mal</h4>
+                          <p className="text-gray-600 text-sm">Errores que están haciendo que pierdas pacientes</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
+                          <Sparkles className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Qué mejorar</h4>
+                          <p className="text-gray-600 text-sm">Oportunidades que no estás aprovechando</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-3 items-start">
+                        <div className="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle2 className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-gray-900">Cómo solucionarlo</h4>
+                          <p className="text-gray-600 text-sm">Plan concreto paso a paso para tu clínica</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center">
+                          <MessageCircle className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Recibirás la auditoría por</p>
+                          <p className="font-semibold text-gray-900">WhatsApp en 24-48h</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div class="flex gap-3 items-start">
-                  <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                    </svg>
-                  </div>
+
                   <div>
-                    <h4 class="font-semibold text-gray-900">Cómo solucionarlo</h4>
-                    <p class="text-gray-600 text-sm">Plan concreto paso a paso para tu clínica</p>
+                    {!formSubmitted ? (
+                      <form onSubmit={handleFormSubmit} className="space-y-4">
+                        <div>
+                          <label className="block text-gray-700 font-medium mb-1.5">Tu nombre *</label>
+                          <input
+                            type="text"
+                            required
+                            value={formData.nombre}
+                            onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all"
+                            placeholder="Ej: Dr. García"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium mb-1.5">Nombre de la clínica *</label>
+                          <input
+                            type="text"
+                            required
+                            value={formData.clinica}
+                            onChange={(e) => setFormData({...formData, clinica: e.target.value})}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all"
+                            placeholder="Ej: Dental Sonrisas"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium mb-1.5">WhatsApp *</label>
+                          <input
+                            type="tel"
+                            required
+                            value={formData.whatsapp}
+                            onChange={(e) => setFormData({...formData, whatsapp: e.target.value})}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all"
+                            placeholder="+34 600 000 000"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-gray-700 font-medium mb-1.5">¿Usas WhatsApp Business actualmente?</label>
+                          <select
+                            value={formData.usa_wb}
+                            onChange={(e) => setFormData({...formData, usa_wb: e.target.value})}
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all"
+                          >
+                            <option>No, uso WhatsApp normal</option>
+                            <option>Sí, pero no lo configuré bien</option>
+                            <option>Sí, lo uso regularmente</option>
+                          </select>
+                        </div>
+                        <button
+                          type="submit"
+                          className="w-full bg-gradient-to-r from-[#25D366] to-[#20BD5A] hover:from-[#20BD5A] hover:to-[#25D366] text-white rounded-xl py-4 font-bold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2"
+                        >
+                          <Send className="w-5 h-5" />
+                          Solicitar auditoría gratuita
+                        </button>
+                      </form>
+                    ) : (
+                      <div className="text-center py-8">
+                        <div className="w-20 h-20 bg-[#25D366]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <CheckCircle2 className="w-10 h-10 text-[#25D366]" />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900 mb-2">¡Solicitud enviada!</h3>
+                        <p className="text-gray-600 mb-4">Te contactaré por WhatsApp en menos de 24-48 horas con tu auditoría gratuita.</p>
+                        <div className="bg-gray-50 rounded-xl p-4 text-left">
+                          <p className="text-sm text-gray-600"><strong>Próximos pasos:</strong></p>
+                          <ul className="text-sm text-gray-600 mt-2 space-y-1">
+                            <li>✓ Revisaré tu WhatsApp Business</li>
+                            <li>✓ Identificaré los problemas</li>
+                            <li>✓ Te enviaré las mejoras por WhatsApp</li>
+                          </ul>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
-              <div class="mt-6 p-4 bg-gray-50 rounded-xl">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <p class="text-sm text-gray-600">Recibirás la auditoría por</p>
-                    <p class="font-semibold text-gray-900">WhatsApp en 24-48h</p>
-                  </div>
+
+              <div className="bg-gray-50 px-6 py-4 border-t">
+                <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2"><Shield className="w-4 h-4 text-[#25D366]" />Sin compromiso</div>
+                  <div className="flex items-center gap-2"><Zap className="w-4 h-4 text-[#25D366]" />Respuesta en 24-48h</div>
+                  <div className="flex items-center gap-2"><Lock className="w-4 h-4 text-[#25D366]" />100% gratis</div>
                 </div>
               </div>
             </div>
-            
-            <!-- Right - Form -->
-            <div id="formContainer">
-              <form id="auditForm" class="space-y-4">
-                <div>
-                  <label class="block text-gray-700 font-medium mb-1.5">Tu nombre *</label>
-                  <input type="text" required id="nombre" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dr. García">
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ROI Calculator Section */}
+      <section id="calculadora" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-100px' }}
+            variants={staggerContainer}
+            className="text-center mb-8 sm:mb-12"
+          >
+            <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+              <Calculator className="w-4 h-4" />
+              Calculadora de pérdidas
+            </motion.div>
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              ¿Cuánto dinero estás perdiendo cada mes?
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg max-w-2xl mx-auto">
+              Calcula cuánto te cuesta no tener WhatsApp Business bien configurado
+            </motion.p>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={fadeInUp}>
+            <Card className="border-2 border-red-100 shadow-xl overflow-hidden">
+              <CardContent className="p-0">
+                <div className="bg-gradient-to-r from-red-50 to-orange-50 p-6 sm:p-8">
+                  <div className="grid md:grid-cols-2 gap-8">
+                    <div className="space-y-6">
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="text-gray-700 font-medium flex items-center gap-2">
+                            <Users className="w-4 h-4 text-red-500" />
+                            Pacientes que pierdes al mes
+                          </label>
+                          <span className="text-2xl font-bold text-gray-900 bg-white px-3 py-1 rounded-lg shadow-sm">{patientsLost}</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="1"
+                          max="30"
+                          value={patientsLost}
+                          onChange={(e) => setPatientsLost(Number(e.target.value))}
+                          className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                          style={{ background: `linear-gradient(to right, #ef4444 0%, #ef4444 ${(patientsLost / 30) * 100}%, #e5e7eb ${(patientsLost / 30) * 100}%, #e5e7eb 100%)` }}
+                        />
+                        <div className="flex justify-between text-xs text-gray-500 mt-1"><span>1</span><span>30</span></div>
+                      </div>
+
+                      <div>
+                        <div className="flex items-center justify-between mb-3">
+                          <label className="text-gray-700 font-medium flex items-center gap-2">
+                            <span className="text-lg">💰</span>
+                            Precio promedio de tratamiento
+                          </label>
+                          <span className="text-2xl font-bold text-gray-900 bg-white px-3 py-1 rounded-lg shadow-sm">{treatmentPrice}€</span>
+                        </div>
+                        <input
+                          type="range"
+                          min="50"
+                          max="500"
+                          step="10"
+                          value={treatmentPrice}
+                          onChange={(e) => setTreatmentPrice(Number(e.target.value))}
+                          className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                          style={{ background: `linear-gradient(to right, #f97316 0%, #f97316 ${((treatmentPrice - 50) / 450) * 100}%, #e5e7eb ${((treatmentPrice - 50) / 450) * 100}%, #e5e7eb 100%)` }}
+                        />
+                        <div className="flex justify-between text-xs text-gray-500 mt-1"><span>50€</span><span>500€</span></div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-center">
+                      <div className="bg-white rounded-2xl p-6 shadow-lg border border-red-100 text-center">
+                        <div className="flex items-center justify-center gap-2 mb-2">
+                          <TrendingDown className="w-5 h-5 text-red-500" />
+                          <span className="text-gray-600 font-medium">Estás perdiendo al mes</span>
+                        </div>
+                        <div className="text-5xl sm:text-6xl font-bold text-red-600 mb-2">{formatNumber(monthlyLoss)}€</div>
+                        <div className="text-gray-500 text-sm mb-4">= {formatNumber(yearlyLoss)}€ al año</div>
+                        <div className="bg-red-50 rounded-lg p-3 flex items-start gap-2">
+                          <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                          <p className="text-sm text-gray-600 text-left">Cada paciente que no contestas es dinero que se va a tu competencia.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white p-6 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div>
+                      <p className="font-semibold text-gray-900">¿Quieres recuperar esos {formatNumber(monthlyLoss)}€ cada mes?</p>
+                      <p className="text-gray-500 text-sm">La solución cuesta desde solo 197€ (una sola vez)</p>
+                    </div>
+                    <a href="#auditoria" className="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-6 py-3 shadow-lg shadow-green-200/50 whitespace-nowrap flex items-center gap-2">
+                      <Search className="w-4 h-4" />
+                      Auditoría gratuita
+                    </a>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="servicios" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer} className="text-center mb-12 sm:mb-16">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">¿Qué incluye WhatsApp Dental Setup?</motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg max-w-2xl mx-auto">Todo lo que necesitas para dejar de perder pacientes</motion.p>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {services.map((service, index) => (
+              <motion.div key={index} variants={fadeInUp} className="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
+                <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
+                  <div className="text-[#25D366]">{service.icon}</div>
                 </div>
                 <div>
-                  <label class="block text-gray-700 font-medium mb-1.5">Nombre de la clínica *</label>
-                  <input type="text" required id="clinica" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="Ej: Dental Sonrisas">
+                  <h3 className="font-semibold text-gray-900 mb-1">{service.title}</h3>
+                  <p className="text-gray-600 text-sm">{service.description}</p>
                 </div>
-                <div>
-                  <label class="block text-gray-700 font-medium mb-1.5">WhatsApp *</label>
-                  <input type="tel" required id="whatsapp" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all" placeholder="+34 600 000 000">
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center">
+            <div className="inline-flex items-center gap-2 bg-[#25D366]/10 text-gray-700 px-6 py-3 rounded-full text-sm border border-[#25D366]/20">
+              <Clock className="w-4 h-4 text-[#25D366]" />
+              <strong>Tiempo de implementación:</strong> 3-5 días hábiles
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="precios" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer} className="text-center mb-12 sm:mb-16">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Inversión</motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg max-w-2xl mx-auto">Elige el setup que mejor se adapte a tu clínica</motion.p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Básico */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={fadeInUp} className="border-2 border-[#25D366]/20 shadow-lg rounded-2xl bg-white p-6 sm:p-8 hover:shadow-xl transition-shadow">
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Setup Básico
                 </div>
-                <div>
-                  <label class="block text-gray-700 font-medium mb-1.5">¿Usas WhatsApp Business actualmente?</label>
-                  <select id="usa_wb" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-[#25D366] focus:ring-2 focus:ring-[#25D366]/20 outline-none transition-all">
-                    <option>No, uso WhatsApp normal</option>
-                    <option>Sí, pero no lo configuré bien</option>
-                    <option>Sí, lo uso regularmente</option>
-                  </select>
+                <div className="flex items-baseline justify-center gap-2 mb-2">
+                  <span className="text-4xl sm:text-5xl font-bold text-gray-900">197€</span>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-[#25D366] to-[#20BD5A] hover:from-[#20BD5A] hover:to-[#25D366] text-white rounded-xl py-4 font-bold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
-                  </svg>
-                  Solicitar auditoría gratuita
+                <p className="text-gray-600 text-sm">Pago único • Sin suscripciones</p>
+              </div>
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Configuración completa WhatsApp Business</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Mensaje de bienvenida optimizado</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Respuestas rápidas para lo frecuente</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Sistema de etiquetas para pacientes</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Soporte por WhatsApp</span></div>
+              </div>
+              <a href="#auditoria" className="block w-full bg-[#25D366]/10 hover:bg-[#25D366]/20 text-[#25D366] rounded-xl py-3 font-semibold text-center transition-all">
+                Solicitar auditoría gratis
+              </a>
+            </motion.div>
+
+            {/* Premium */}
+            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={fadeInUp} className="border-2 border-[#25D366] shadow-2xl rounded-2xl bg-white p-6 sm:p-8 relative overflow-hidden hover:shadow-2xl transition-shadow">
+              <div className="absolute top-4 right-4 bg-[#25D366] text-white text-xs font-bold px-3 py-1 rounded-full">RECOMENDADO</div>
+              <div className="text-center mb-6">
+                <div className="inline-flex items-center gap-2 bg-[#25D366] text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <Sparkles className="w-4 h-4" />
+                  Setup Premium
+                </div>
+                <div className="flex items-baseline justify-center gap-2 mb-2">
+                  <span className="text-4xl sm:text-5xl font-bold text-gray-900">347€</span>
+                </div>
+                <p className="text-gray-600 text-sm">Pago único • Sin suscripciones</p>
+              </div>
+              <div className="space-y-3 mb-8">
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Todo lo del Setup Básico</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Mensajes de seguimiento post-tratamiento</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Personalización avanzada</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">Catálogo de servicios completo</span></div>
+                <div className="flex items-start gap-3"><CheckCircle2 className="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" /><span className="text-gray-600 text-sm">7 días de soporte por WhatsApp</span></div>
+              </div>
+              <a href="#auditoria" className="block w-full bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-xl py-3 font-semibold text-center transition-all shadow-lg shadow-green-200/50">
+                Solicitar auditoría gratis
+              </a>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-3xl mx-auto">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer} className="text-center mb-12">
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Preguntas frecuentes</motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg">Todo lo que necesitas saber antes de empezar</motion.p>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={fadeInUp} className="space-y-4">
+            {faqs.map((faq, index) => (
+              <motion.div key={index} variants={fadeInUp} className="border border-gray-200 rounded-xl overflow-hidden">
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  className="w-full flex items-center justify-between p-5 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="font-semibold text-gray-900">{faq.question}</span>
+                  {openFaq === index ? <ChevronUp className="w-5 h-5 text-gray-500" /> : <ChevronDown className="w-5 h-5 text-gray-500" />}
                 </button>
-              </form>
-            </div>
-            
-            <!-- Success Message (hidden by default) -->
-            <div id="successMessage" class="hidden text-center py-8">
-              <div class="w-20 h-20 bg-[#25D366]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-10 h-10 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">¡Solicitud enviada!</h3>
-              <p class="text-gray-600 mb-4">Te contactaré por WhatsApp en menos de 24-48 horas con tu auditoría gratuita.</p>
-              <div class="bg-gray-50 rounded-xl p-4 text-left">
-                <p class="text-sm text-gray-600"><strong>Próximos pasos:</strong></p>
-                <ul class="text-sm text-gray-600 mt-2 space-y-1">
-                  <li>✓ Revisaré tu WhatsApp Business</li>
-                  <li>✓ Identificaré los problemas</li>
-                  <li>✓ Te enviaré las mejoras por WhatsApp</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+                {openFaq === index && (
+                  <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} className="overflow-hidden">
+                    <div className="px-5 pb-5 text-gray-600">{faq.answer}</div>
+                  </motion.div>
+                )}
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
-        
-        <!-- Bottom trust bar -->
-        <div class="bg-gray-50 px-6 py-4 border-t">
-          <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600">
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-              </svg>
-              Sin compromiso
-            </div>
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-              </svg>
-              Respuesta en 24-48h
-            </div>
-            <div class="flex items-center gap-2">
-              <svg class="w-4 h-4 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-              </svg>
-              100% gratis
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  <!-- ROI Calculator Section -->
-  <section id="calculadora" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-4xl mx-auto">
-      <div class="text-center mb-8 sm:mb-12">
-        <div class="inline-flex items-center gap-2 bg-red-100 text-red-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-          </svg>
-          Calculadora de pérdidas
-        </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">¿Cuánto dinero estás perdiendo cada mes?</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Calcula cuánto te cuesta no tener WhatsApp Business bien configurado</p>
-      </div>
-      
-      <div class="border-2 border-red-100 shadow-xl overflow-hidden rounded-2xl">
-        <div class="bg-gradient-to-r from-red-50 to-orange-50 p-6 sm:p-8">
-          <div class="grid md:grid-cols-2 gap-8">
-            <!-- Left side - Inputs -->
-            <div class="space-y-6">
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <label class="text-gray-700 font-medium flex items-center gap-2">
-                    <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                    </svg>
-                    Pacientes que pierdes al mes
-                  </label>
-                  <span id="patientsDisplay" class="text-2xl font-bold text-gray-900 bg-white px-3 py-1 rounded-lg shadow-sm">10</span>
+      {/* About Me Section - FOTO DE PERFIL ACTUALIZADA */}
+      <section id="sobre-mi" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-4xl mx-auto">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer}>
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <motion.div variants={fadeInUp}>
+                <div className="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
+                  <HeadphonesIcon className="w-4 h-4" />
+                  Sobre mí
                 </div>
-                <input type="range" id="patientsSlider" min="1" max="30" value="10" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer text-red-500">
-                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>1</span>
-                  <span>30</span>
+                <div className="flex items-center gap-4 mb-6">
+                  <button
+                    onClick={() => setImageModalOpen(true)}
+                    className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-[#25D366]/30 shadow-xl flex-shrink-0 cursor-pointer group hover:border-[#25D366] transition-all hover:scale-105 ring-4 ring-white"
+                  >
+                    <Image
+                      src="/upload/perfil.jpg"
+                      alt="Toni Real - Fundador de WhatsAppDental"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all flex items-center justify-center">
+                      <Maximize2 className="w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                  </button>
+                  <div>
+                    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Hola, soy Toni Real</h2>
+                    <p className="text-[#25D366] font-semibold text-lg">Consultor empresarial especializado en comunicación digital</p>
+                  </div>
                 </div>
-              </div>
-              
-              <div>
-                <div class="flex items-center justify-between mb-3">
-                  <label class="text-gray-700 font-medium flex items-center gap-2">
-                    <span class="text-lg">💰</span>
-                    Precio promedio de tratamiento
-                  </label>
-                  <span id="priceDisplay" class="text-2xl font-bold text-gray-900 bg-white px-3 py-1 rounded-lg shadow-sm">200€</span>
+                <div className="space-y-4 text-gray-600 leading-relaxed">
+                  <p>
+                    Combino mi experiencia como consultor empresarial y programador de sistemas para crear soluciones que realmente funcionan. No soy una empresa grande con call centers, trabajo directo con cada clínica.
+                  </p>
+                  <p>
+                    Empecé ayudando a un amigo dentista que perdía pacientes por no responder mensajes a tiempo. Vi que el problema era muy común y decidí especializarme en comunicación digital para clínicas dentales.
+                  </p>
+                  <p>
+                    Mi enfoque es práctico: te configuro todo para que empieces a ver resultados desde la primera semana, y te enseño a mantenerlo tú mismo.
+                  </p>
                 </div>
-                <input type="range" id="priceSlider" min="50" max="500" step="10" value="200" class="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer text-orange-500">
-                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>50€</span>
-                  <span>500€</span>
+                <div className="mt-6 flex flex-wrap gap-4">
+                  <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+                    <Target className="w-5 h-5 text-[#25D366]" />
+                    <span className="text-gray-700 font-medium">+50 clínicas configuradas</span>
+                  </div>
+                  <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
+                    <Shield className="w-5 h-5 text-[#25D366]" />
+                    <span className="text-gray-700 font-medium">100% satisfacción</span>
+                  </div>
                 </div>
-              </div>
-            </div>
-            
-            <!-- Right side - Results -->
-            <div class="flex flex-col justify-center">
-              <div class="bg-white rounded-2xl p-6 shadow-lg border border-red-100 text-center">
-                <div class="flex items-center justify-center gap-2 mb-2">
-                  <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"/>
-                  </svg>
-                  <span class="text-gray-600 font-medium">Estás perdiendo al mes</span>
+              </motion.div>
+
+              <motion.div variants={fadeInUp} className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-100">
+                <h3 className="font-bold text-gray-900 text-xl mb-6">¿Por qué trabajar conmigo?</h3>
+                <div className="space-y-4">
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
+                      <Workflow className="w-5 h-5 text-[#25D366]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Proceso probado</h4>
+                      <p className="text-gray-600 text-sm">Metodología testada en más de 50 clínicas dentales.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
+                      <HeadphonesIcon className="w-5 h-5 text-[#25D366]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Soporte personal</h4>
+                      <p className="text-gray-600 text-sm">Hablas directo conmigo, no con un call center.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
+                      <Target className="w-5 h-5 text-[#25D366]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Enfoque en resultados</h4>
+                      <p className="text-gray-600 text-sm">No vendemos configuraciones, vendemos más pacientes.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4 items-start">
+                    <div className="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0">
+                      <Clock className="w-5 h-5 text-[#25D366]" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Implementación rápida</h4>
+                      <p className="text-gray-600 text-sm">En 3-5 días tienes todo funcionando.</p>
+                    </div>
+                  </div>
                 </div>
-                <div id="monthlyLoss" class="text-5xl sm:text-6xl font-bold text-red-600 mb-2">2.000€</div>
-                <div id="yearlyLoss" class="text-gray-500 text-sm mb-4">= 24.000€ al año</div>
-                <div class="bg-red-50 rounded-lg p-3 flex items-start gap-2">
-                  <svg class="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                  </svg>
-                  <p class="text-sm text-gray-600 text-left">Cada paciente que no contestas es dinero que se va a tu competencia.</p>
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Final */}
+      <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[#25D366]/5 to-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-100px' }} variants={staggerContainer}>
+            <motion.h2 variants={fadeInUp} className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              ¿Listo para dejar de perder pacientes?
+            </motion.h2>
+            <motion.p variants={fadeInUp} className="text-gray-600 text-lg mb-8">
+              La auditoría es gratuita y sin compromiso. Te digo exactamente qué necesitas.
+            </motion.p>
+            <motion.div variants={fadeInUp}>
+              <a
+                href="#auditoria"
+                className="inline-flex items-center justify-center gap-3 bg-gradient-to-r from-[#25D366] to-[#20BD5A] text-white rounded-2xl px-10 py-5 text-xl font-bold shadow-2xl shadow-green-300/50 hover:shadow-green-400/50 transition-all hover:scale-105"
+              >
+                <Gift className="w-6 h-6" />
+                Solicitar auditoría gratuita
+              </a>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-3">
+              <Image src="/logo-wdw.png" alt="WhatsAppDental" width={40} height={40} className="w-10 h-10 object-contain" />
+              <span className="text-xl font-bold">WhatsApp<span className="text-[#25D366]">Dental</span></span>
+            </div>
+            <div className="flex items-center gap-6 text-gray-400">
+              <a href={`mailto:${EMAIL_CONTACT}`} className="hover:text-white transition-colors">{EMAIL_CONTACT}</a>
+              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} className="hover:text-white transition-colors flex items-center gap-2">
+                <MessageCircle className="w-5 h-5" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
+          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400 text-sm">
+            © {new Date().getFullYear()} WhatsAppDental. Todos los derechos reservados.
+          </div>
+        </div>
+      </footer>
+
+      {/* WhatsApp Floating Button - MEJORADO */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <div className="relative">
+          <AnimatePresence>
+            {whatsappOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.9 }}
+                className="absolute bottom-24 right-0 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100"
+              >
+                <div className="bg-gradient-to-r from-[#25D366] to-[#128C7E] p-5 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                  <div className="absolute bottom-0 left-0 w-16 h-16 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+                  <div className="flex items-center gap-4 relative z-10">
+                    <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg">
+                      <Image src="/logo-wdw.png" alt="WhatsAppDental" width={40} height={40} className="w-10 h-10 object-contain" />
+                    </div>
+                    <div>
+                      <p className="text-white font-bold text-lg">WhatsAppDental</p>
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></span>
+                        <p className="text-white/90 text-sm">En línea • Respondo rápido</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Bottom CTA -->
-        <div class="bg-white p-6 border-t border-gray-100">
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-              <p class="font-semibold text-gray-900">¿Quieres recuperar esos <span id="ctaLoss">2.000€</span> cada mes?</p>
-              <p class="text-gray-500 text-sm">La solución cuesta desde solo 197€ (una sola vez)</p>
-            </div>
-            <a href="#auditoria" class="bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full px-6 py-3 shadow-lg shadow-green-200/50 whitespace-nowrap flex items-center gap-2 font-medium transition-all hover:-translate-y-0.5">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-              </svg>
-              Auditoría gratuita
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services Section -->
-  <section id="servicios" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">¿Qué incluye WhatsApp Dental Setup?</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Todo lo que necesitas para dejar de perder pacientes</p>
-      </div>
-      
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        <!-- Services -->
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Configuración completa WhatsApp Business</h3>
-            <p class="text-gray-600 text-sm">Perfil optimizado con catálogo de servicios y horarios.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Mensaje de bienvenida optimizado</h3>
-            <p class="text-gray-600 text-sm">Primera impresión profesional para cada paciente nuevo.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Respuestas rápidas</h3>
-            <p class="text-gray-600 text-sm">Atajos para lo más frecuente: precios, ubicación, servicios.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Sistema de etiquetas</h3>
-            <p class="text-gray-600 text-sm">Organiza pacientes por estado: nuevo, pendiente, confirmado.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Recordatorios de cita automatizados</h3>
-            <p class="text-gray-600 text-sm">Reduce las ausencias con recordatorios automáticos.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Seguimiento post-tratamiento</h3>
-            <p class="text-gray-600 text-sm">Fideliza pacientes con seguimiento automático.</p>
-          </div>
-        </div>
-        
-        <div class="flex gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors group">
-          <div class="w-10 h-10 rounded-lg bg-[#25D366]/10 flex items-center justify-center flex-shrink-0 group-hover:bg-[#25D366]/20 transition-colors">
-            <svg class="w-5 h-5 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 14l9-5-9-5-9 5 9 5z"/>
-              <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="font-semibold text-gray-900 mb-1">Formación práctica (30 min)</h3>
-            <p class="text-gray-600 text-sm">Te enseño a usar todo para que seas autónomo.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="text-center">
-        <div class="inline-flex items-center gap-2 bg-[#25D366]/10 text-gray-700 px-6 py-3 rounded-full text-sm border border-[#25D366]/20">
-          <svg class="w-4 h-4 text-[#25D366]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-          <strong>Tiempo de implementación:</strong> 3-5 días hábiles
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing Section -->
-  <section id="precios" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-5xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Inversión</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Elige el setup que mejor se adapte a tu clínica</p>
-      </div>
-      
-      <div class="grid md:grid-cols-2 gap-8">
-        <!-- Básico -->
-        <div class="border-2 border-[#25D366]/20 shadow-lg rounded-2xl bg-white p-6 sm:p-8 hover:shadow-xl transition-shadow">
-          <div class="text-center mb-6">
-            <div class="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              Setup Básico
-            </div>
-            <div class="flex items-baseline justify-center gap-2 mb-2">
-              <span class="text-4xl sm:text-5xl font-bold text-gray-900">197€</span>
-            </div>
-            <p class="text-gray-600 text-sm">Pago único • Sin suscripciones</p>
-          </div>
-          <div class="space-y-3 mb-8">
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Configuración completa WhatsApp Business</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Mensaje de bienvenida optimizado</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Respuestas rápidas para lo frecuente</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Sistema de etiquetas para pacientes</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Formación práctica (30 min)</span>
-            </div>
-          </div>
-          <a href="#auditoria" class="w-full bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full py-4 font-semibold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            Solicitar auditoría gratis
-          </a>
-        </div>
-        
-        <!-- Premium -->
-        <div class="border-2 border-[#25D366] shadow-xl rounded-2xl bg-white p-6 sm:p-8 relative hover:shadow-2xl transition-shadow">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#25D366] text-white text-xs font-bold px-4 py-1 rounded-full">RECOMENDADO</div>
-          <div class="text-center mb-6">
-            <div class="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
-              </svg>
-              Setup Premium
-            </div>
-            <div class="flex items-baseline justify-center gap-2 mb-2">
-              <span class="text-4xl sm:text-5xl font-bold text-gray-900">347€</span>
-            </div>
-            <p class="text-gray-600 text-sm">Pago único • Con personalización extra</p>
-          </div>
-          <div class="space-y-3 mb-8">
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm"><strong>Todo lo del Básico, más:</strong></span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Mensajes de seguimiento post-tratamiento</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Personalización avanzada de mensajes</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Catálogo de servicios completo</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">Automatizaciones adicionales</span>
-            </div>
-            <div class="flex items-start gap-3">
-              <svg class="w-5 h-5 text-[#25D366] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <span class="text-gray-600 text-sm">7 días de soporte por WhatsApp</span>
-            </div>
-          </div>
-          <a href="#auditoria" class="w-full bg-[#25D366] hover:bg-[#20BD5A] text-white rounded-full py-4 font-semibold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-            Solicitar auditoría gratis
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- About Section with Profile Photo -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-white">
-    <div class="max-w-6xl mx-auto">
-      <div class="grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <div class="inline-flex items-center gap-2 bg-[#25D366]/10 text-[#25D366] px-4 py-2 rounded-full text-sm font-medium mb-4">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
-            </svg>
-            Sobre mí
-          </div>
-          <div class="flex items-center gap-4 mb-6">
-            <!-- Profile Photo -->
-            <div class="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-4 border-[#25D366]/20 shadow-lg flex-shrink-0">
-              <img src="./perfil.jpg" alt="Toni Real - Fundador de WhatsAppDental" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div class="hidden w-full h-full bg-gradient-to-br from-[#25D366]/20 to-[#25D366]/40 items-center justify-center">
-                <span class="text-3xl sm:text-4xl font-bold text-[#25D366]">TR</span>
-              </div>
-            </div>
-            <div>
-              <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Hola, soy Toni Real</h2>
-              <p class="text-[#25D366] font-semibold text-lg">Consultor empresarial especializado en comunicación digital</p>
-            </div>
-          </div>
-          <div class="space-y-4 text-gray-600 leading-relaxed">
-            <p>Combino mi experiencia como consultor empresarial y programador de sistemas para crear soluciones que realmente funcionan. No soy una empresa grande con call centers, trabajo directo con cada clínica.</p>
-            <p>Empecé ayudando a un amigo dentista que perdía pacientes por no responder mensajes a tiempo. Vi que el problema era muy común y decidí especializarme en comunicación digital para clínicas dentales.</p>
-            <p>Mi enfoque es simple: te configuro las herramientas, las personalizo para tu clínica, y te enseño a usarlas para que seas completamente autónomo.</p>
-          </div>
-          <div class="flex items-center gap-4 mt-8">
-            <div class="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-              </svg>
-            </div>
-            <div>
-              <p class="font-semibold text-gray-900">¿Tienes dudas? Escríbeme directo</p>
-              <p class="text-gray-500 text-sm">Te respondo personalmente</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-2xl p-6 sm:p-8 border border-gray-200 shadow-lg">
-          <h3 class="font-semibold text-gray-900 mb-6 text-lg">¿Por qué trabajar conmigo?</h3>
-          <div class="space-y-4">
-            <div class="flex gap-4 items-start">
-              <div class="w-8 h-8 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Especializado en clínicas dentales</h4>
-                <p class="text-gray-600 text-sm">Conozco los problemas específicos del sector</p>
-              </div>
-            </div>
-            <div class="flex gap-4 items-start">
-              <div class="w-8 h-8 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Trato personalizado</h4>
-                <p class="text-gray-600 text-sm">Hablas directo conmigo, no con un equipo</p>
-              </div>
-            </div>
-            <div class="flex gap-4 items-start">
-              <div class="w-8 h-8 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Sin compromisos largos</h4>
-                <p class="text-gray-600 text-sm">Pagas por lo que necesitas, nada más</p>
-              </div>
-            </div>
-            <div class="flex gap-4 items-start">
-              <div class="w-8 h-8 rounded-lg bg-[#25D366]/10 text-[#25D366] flex items-center justify-center flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-              </div>
-              <div>
-                <h4 class="font-medium text-gray-900">Te hago autónomo</h4>
-                <p class="text-gray-600 text-sm">El objetivo es que no dependas de mí</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq" class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-    <div class="max-w-3xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4">Preguntas frecuentes</h2>
-        <p class="text-gray-600 text-lg max-w-2xl mx-auto">Resuelvo las dudas más comunes sobre el servicio</p>
-      </div>
-      
-      <div class="space-y-4" id="faqContainer">
-        <!-- FAQ items will be generated by JavaScript -->
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA Final -->
-  <section class="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#25D366]">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6">¿Listo para dejar de perder pacientes?</h2>
-      <p class="text-white/90 text-lg mb-8 max-w-2xl mx-auto">Agenda una auditoría gratuita y te digo exactamente qué necesitas para mejorar la comunicación de tu clínica.</p>
-      <a href="#auditoria" class="inline-flex items-center justify-center gap-3 bg-white text-[#25D366] rounded-2xl px-10 py-5 text-xl font-bold shadow-2xl hover:shadow-lg transition-all hover:scale-105">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-        </svg>
-        Solicitar auditoría gratuita
-      </a>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900">
-    <div class="max-w-6xl mx-auto">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-        <div class="flex items-center gap-3">
-          <img src="./logo.png" alt="WhatsAppDental Logo" class="h-10 w-auto" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="hidden w-10 h-10 rounded-xl bg-[#25D366] flex items-center justify-center">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-          </div>
-          <span class="text-lg font-bold text-white">WhatsApp<span class="text-[#25D366]">Dental</span></span>
-        </div>
-        <div class="flex items-center gap-6 text-gray-400 text-sm">
-          <a href="https://wa.me/34667470862" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
-            +34 667 470 862
-          </a>
-          <a href="mailto:infoatiende24@gmail.com" class="hover:text-white transition-colors flex items-center gap-2">
-            infoatiende24@gmail.com
-          </a>
-        </div>
-      </div>
-      <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-        © <span id="currentYear"></span> WhatsAppDental. Todos los derechos reservados.
-      </div>
-    </div>
-  </footer>
-
-  <!-- WhatsApp Widget - Estilo Mejorado -->
-  <div class="wa-widget" id="waWidget">
-    <!-- Chat Popup -->
-    <div class="wa-popup" id="waPopup">
-      <div class="wa-header">
-        <div class="wa-avatar">
-          <img src="./perfil.jpg" alt="Toni Real" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-          <div class="hidden w-full h-full items-center justify-center text-white font-bold text-lg">TR</div>
-        </div>
-        <div class="wa-info">
-          <h4>Toni Real</h4>
-          <p><span class="wa-status"></span> En línea</p>
-        </div>
-      </div>
-      <div class="wa-body">
-        <div class="wa-message">
-          ¡Hola! 👋 Soy Toni, consultor de WhatsApp Business para clínicas dentales.
-          <br><br>
-          ¿Tienes alguna pregunta sobre cómo configurar WhatsApp para tu clínica? Estoy aquí para ayudarte.
-          <div class="wa-time">Ahora</div>
-        </div>
-      </div>
-      <div class="wa-footer">
-        <button class="wa-start-btn" onclick="openWhatsApp()">
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-          Iniciar conversación
-        </button>
-      </div>
-    </div>
-    
-    <!-- Floating Button -->
-    <button class="wa-button" id="waButton" onclick="toggleWhatsApp()">
-      <svg viewBox="0 0 24 24" id="waIcon">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-      </svg>
-      <svg viewBox="0 0 24 24" id="waCloseIcon" class="hidden" fill="white">
-        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-      </svg>
-    </button>
-  </div>
-
-  <script>
-    // ============================================
-    // CONFIGURACIÓN
-    // ============================================
-    const WHATSAPP_NUMBER = '34667470862';
-    const EMAIL_CONTACT = 'infoatiende24@gmail.com';
-    
-    // ============================================
-    // UTILIDADES
-    // ============================================
-    function formatNumber(num) {
-      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    }
-    
-    function openWhatsApp(message) {
-      const defaultMessage = 'Hola! Me interesa una auditoría gratuita de mi WhatsApp Business para mi clínica dental.';
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message || defaultMessage)}`;
-      window.open(url, '_blank');
-    }
-    
-    // ============================================
-    // MOBILE MENU
-    // ============================================
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuIcon = document.getElementById('menuIcon');
-    const closeIcon = document.getElementById('closeIcon');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-    
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      menuIcon.classList.toggle('hidden');
-      closeIcon.classList.toggle('hidden');
-    });
-    
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        menuIcon.classList.remove('hidden');
-        closeIcon.classList.add('hidden');
-      });
-    });
-    
-    // ============================================
-    // WHATSAPP WIDGET
-    // ============================================
-    let waOpen = false;
-    const waPopup = document.getElementById('waPopup');
-    const waButton = document.getElementById('waButton');
-    const waIcon = document.getElementById('waIcon');
-    const waCloseIcon = document.getElementById('waCloseIcon');
-    
-    function toggleWhatsApp() {
-      waOpen = !waOpen;
-      if (waOpen) {
-        waPopup.classList.add('active');
-        waIcon.classList.add('hidden');
-        waCloseIcon.classList.remove('hidden');
-      } else {
-        waPopup.classList.remove('active');
-        waIcon.classList.remove('hidden');
-        waCloseIcon.classList.add('hidden');
-      }
-    }
-    
-    // Close popup when clicking outside
-    document.addEventListener('click', (e) => {
-      const widget = document.getElementById('waWidget');
-      if (waOpen && !widget.contains(e.target)) {
-        toggleWhatsApp();
-      }
-    });
-    
-    // ============================================
-    // CALCULADORA ROI
-    // ============================================
-    const patientsSlider = document.getElementById('patientsSlider');
-    const priceSlider = document.getElementById('priceSlider');
-    const patientsDisplay = document.getElementById('patientsDisplay');
-    const priceDisplay = document.getElementById('priceDisplay');
-    const monthlyLoss = document.getElementById('monthlyLoss');
-    const yearlyLoss = document.getElementById('yearlyLoss');
-    const ctaLoss = document.getElementById('ctaLoss');
-    
-    function updateCalculator() {
-      const patients = parseInt(patientsSlider.value);
-      const price = parseInt(priceSlider.value);
-      const monthly = patients * price;
-      const yearly = monthly * 12;
-      
-      patientsDisplay.textContent = patients;
-      priceDisplay.textContent = price + '€';
-      monthlyLoss.textContent = formatNumber(monthly) + '€';
-      yearlyLoss.textContent = '= ' + formatNumber(yearly) + '€ al año';
-      ctaLoss.textContent = formatNumber(monthly) + '€';
-      
-      // Update slider backgrounds
-      const patientsPercent = ((patients - 1) / 29) * 100;
-      patientsSlider.style.background = `linear-gradient(to right, #ef4444 0%, #ef4444 ${patientsPercent}%, #e5e7eb ${patientsPercent}%, #e5e7eb 100%)`;
-      
-      const pricePercent = ((price - 50) / 450) * 100;
-      priceSlider.style.background = `linear-gradient(to right, #f97316 0%, #f97316 ${pricePercent}%, #e5e7eb ${pricePercent}%, #e5e7eb 100%)`;
-    }
-    
-    patientsSlider.addEventListener('input', updateCalculator);
-    priceSlider.addEventListener('input', updateCalculator);
-    updateCalculator();
-    
-    // ============================================
-    // FORMULARIO DE AUDITORÍA
-    // ============================================
-    const auditForm = document.getElementById('auditForm');
-    const formContainer = document.getElementById('formContainer');
-    const successMessage = document.getElementById('successMessage');
-    
-    auditForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      const nombre = document.getElementById('nombre').value;
-      const clinica = document.getElementById('clinica').value;
-      const whatsapp = document.getElementById('whatsapp').value;
-      const usa_wb = document.getElementById('usa_wb').value;
-      
-      const message = `Hola! Solicito auditoría gratuita.
-
-Nombre: ${nombre}
-Clínica: ${clinica}
-WhatsApp: ${whatsapp}
-WhatsApp Business: ${usa_wb}`;
-      
-      openWhatsApp(message);
-      
-      // Show success message
-      formContainer.classList.add('hidden');
-      successMessage.classList.remove('hidden');
-    });
-    
-    // ============================================
-    // FAQ ACCORDION
-    // ============================================
-    const faqs = [
-      {
-        question: '¿Cuánto cuesta exactamente?',
-        answer: 'El Setup Básico cuesta 197€ y el Setup Premium cuesta 347€. Ambos son pagos únicos, sin suscripciones ni costes ocultos. En la auditoría gratuita te ayudo a elegir el que mejor se adapta a tu clínica.'
-      },
-      {
-        question: '¿Necesito ser experto en tecnología?',
-        answer: 'No, para nada. WhatsApp Business es sencillo de usar. Yo te configuro todo y te enseño lo básico en una formación de 30 minutos. La mayoría de mis clientes manejan todo ellos solos después de la primera sesión.'
-      },
-      {
-        question: '¿Cuánto tiempo toma implementar?',
-        answer: 'El setup completo se implementa en 3-5 días hábiles. Te avanzo los tiempos exactos en la auditoría gratuita según las necesidades específicas de tu clínica.'
-      },
-      {
-        question: '¿Ofreces soporte después?',
-        answer: 'Sí, el Setup Básico incluye soporte por WhatsApp y el Setup Premium incluye 7 días de soporte. Si necesitas más tiempo o actualizaciones, podemos acordar un mantenimiento adicional.'
-      },
-      {
-        question: '¿Eres una empresa grande?',
-        answer: 'No, soy un consultor independiente. Eso significa que tú hablas directo conmigo, no con un call center. Me dedico específicamente a clínicas dentales porque conozco el sector.'
-      },
-      {
-        question: '¿Qué pasa si no me funciona?',
-        answer: 'Si después de implementar todo no ves mejoras en tu comunicación, trabajamos hasta que funcione. Mi objetivo es que salgas con un sistema que realmente te ayude a captar más pacientes.'
-      },
-      {
-        question: '¿Qué diferencia hay entre el Básico y el Premium?',
-        answer: 'El Setup Premium incluye todo lo del Básico más: mensajes de seguimiento post-tratamiento, personalización avanzada, catálogo de servicios completo, automatizaciones adicionales y 7 días de soporte por WhatsApp.'
-      }
-    ];
-    
-    const faqContainer = document.getElementById('faqContainer');
-    let openFaqIndex = null;
-    
-    faqs.forEach((faq, index) => {
-      const faqItem = document.createElement('div');
-      faqItem.className = 'bg-white rounded-2xl border border-gray-200 overflow-hidden hover:border-[#25D366]/30 transition-colors';
-      faqItem.innerHTML = `
-        <button class="w-full px-6 py-5 flex items-center justify-between text-left" onclick="toggleFaq(${index})">
-          <span class="font-semibold text-gray-900 pr-4">${faq.question}</span>
-          <svg class="w-5 h-5 text-[#25D366] flex-shrink-0 transform transition-transform" id="faqIcon${index}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-          </svg>
-        </button>
-        <div class="faq-content px-6" id="faqContent${index}">
-          <div class="pb-5 text-gray-600 leading-relaxed">${faq.answer}</div>
-        </div>
-      `;
-      faqContainer.appendChild(faqItem);
-    });
-    
-    function toggleFaq(index) {
-      const content = document.getElementById(`faqContent${index}`);
-      const icon = document.getElementById(`faqIcon${index}`);
-      
-      if (openFaqIndex === index) {
-        content.classList.remove('open');
-        icon.classList.remove('rotate-180');
-        openFaqIndex = null;
-      } else {
-        // Close previous
-        if (openFaqIndex !== null) {
-          document.getElementById(`faqContent${openFaqIndex}`).classList.remove('open');
-          document.getElementById(`faqIcon${openFaqIndex}`).classList.remove('rotate-180');
-        }
-        // Open new
-        content.classList.add('open');
-        icon.classList.add('rotate-180');
-        openFaqIndex = index;
-      }
-    }
-    
-    // ============================================
-    // YEAR UPDATE
-    // ============================================
-    document.getElementById('currentYear').textContent = new Date().getFullYear();
-    
-    // ============================================
-    // SCROLL EFFECTS
-    // ============================================
-    const header = document.getElementById('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 20) {
-        header.classList.add('shadow-md');
-      } else {
-        header.classList.remove('shadow-md');
-      }
-    });
-  </script>
-</body>
-</html>
+                
+                <div className="p-4 bg-[#ECE5DD]">
+                  <div className="flex gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-[#25D366] flex items-center justify-center flex-shrink-0">
+                      <MessageCircle className="w-4 h-4 text-white" />
+                    </div>
+                    <div className="bg-white rounded-2xl rounded-tl-none p-3 shadow-sm max-w-[85%]">
+                      <p className="text-gray-800 text-sm leading-relaxed">¡Hola! 👋 Bienvenido a WhatsAppDental.</p>
+                      <p className="text-gray-800 text-sm leading-relaxed mt-2">¿Tienes alguna pregunta sobre nuestros servicios para clínicas dentales? Estoy aquí para ayudarte. 🦷</p>
+                      <p className="text-gray-400 text-xs text-right mt-1">ahora</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="p-4 bg-white border-t border-gray-100">
+                  <button
+                    onClick={() => handleWhatsAppClick()}
+                    className="w-full bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#20BD5A] hover:to-[#25D366] text-white rounded-2xl py-4 font-semibold shadow-lg shadow-green-200/50 transition-all flex items-center justify-center gap-3 text-lg"
+                  >
